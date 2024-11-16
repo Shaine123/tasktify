@@ -1,0 +1,61 @@
+
+.singleTodo-card{
+   background-color: #FDF0D5;
+   display: flex;
+   padding: 15px;
+   border-radius: 5px;
+   width: 90%;
+   margin-top: 15px;
+   align-items: center; 
+   transition: all ease-in-out 0.5s;
+   cursor: pointer;
+}
+
+.singleTodo-card:hover{
+  transform: scale(1.03);
+}
+
+
+.singleTodo-card__text{
+  flex: 1;
+  padding: 5px;
+  font-size: 15px;
+  color: black;
+  text-align: left;
+}
+
+.singleTodo-card__buttons{
+  display: flex;
+  gap: 15px;
+}
+
+.singleTodo-card__button{
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+}
+
+.singleTodo-card__button img{
+  width: 25px;
+  height: auto;
+}
+
+.singleTodo-card__input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid black;
+  margin-right: 15px;
+  padding: 5px;
+}
+
+
+.singleTodo-card__input:focus{
+ outline: none;
+}
+
+@media screen and (max-width: 700px) {
+  .singleTodo-card{
+   width: 93%;
+ }
+}
