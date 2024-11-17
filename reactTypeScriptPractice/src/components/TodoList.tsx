@@ -1,18 +1,16 @@
 
 import React from 'react'
 import './todolist.css'
-import { Todo } from '../model'
 import SingleTodo from './SingleTodo'
 import { Droppable } from '@hello-pangea/dnd'
+import { Action, State } from '../App'
 
 interface Props {
-  todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
-  completedTodos: Todo[],
-  setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  dispatch:React.Dispatch<Action>,
+  state: State
 }
 
-const TodoList:React.FC<Props> = ({todos,setTodos,completedTodos,setCompletedTodos}:Props) => {
+const TodoList:React.FC<Props> = ({ dispatch,state}:Props) => {
 
 
   return (
@@ -28,7 +26,7 @@ const TodoList:React.FC<Props> = ({todos,setTodos,completedTodos,setCompletedTod
             <h3>Active Task</h3>
               <div className='todos'>
                     {
-                        todos.map((todo,index) => (<SingleTodo index = {index} key={todo.id} todo = {todo} todos = {todos} setTodos = {setTodos}/>))
+                        state.activeTodos.map((todo,index) => (<SingleTodo index = {index} key={todo.id} todo = {todo}  state = {state} dispatch = {dispatch}/>))
                     }
               </div>
               {provided.placeholder}
@@ -47,7 +45,7 @@ const TodoList:React.FC<Props> = ({todos,setTodos,completedTodos,setCompletedTod
              <h3>Completed Task</h3>
              <div className='todos'>
                     {
-                        completedTodos.map((completedTodo,index) => (<SingleTodo index = {index} key={completedTodo.id} todo = {completedTodo} todos = {completedTodos} setTodos = {setCompletedTodos}/>))
+                        state.completedTodos.map((completedTodo,index) => (<SingleTodo index = {index} key={completedTodo.id} todo = {completedTodo}  state = {state} dispatch = {dispatch}/>))
                     }
               </div>
               {provided.placeholder}

@@ -3,20 +3,20 @@ import './singletodo.css'
 import { Todo } from '../model'
 import { DeleteIcon, DoneIcon, EditIcon } from '../assets/icons'
 import { Draggable } from '@hello-pangea/dnd'
+import { Action, State } from '../App'
 
 interface Props {
    todo: Todo,
-   todos: Todo[],
-   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-   index: number
+   index: number,
+   dispatch:React.Dispatch<Action>,
+   state: State
 }
 
-const SingleTodo:React.FC<Props> = ({todo, todos, setTodos, index}:Props) => {
+const SingleTodo:React.FC<Props> = ({todo,  index, state, dispatch}:Props) => {
 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [edit,setEdit] = useState<boolean>(false)
-  const [editTodo, setEditTodo] = useState<string>(todo.todo)
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -24,24 +24,29 @@ const SingleTodo:React.FC<Props> = ({todo, todos, setTodos, index}:Props) => {
 
 
   const handleDone = (id:number) => {
-     setTodos(todos.map(todo => {
-          if(todo.id == id){
-             todo.isDone = !todo.isDone
-          }
-          return todo
-     }))
+    //  setTodos(todos.map(todo => {
+    //       if(todo.id == id){
+    //          todo.isDone = !todo.isDone
+    //       }
+    //       return todo
+    //  }))
+    dispatch({type: 'done', value: {id: id, todo: '', isDone: !todo.isDone, isEditing: false},values: []})
   }
 
   const handleDelete = (id:number) => {
-     setTodos(todos.filter(todo => todo.id !== id))
+    //  setTodos(todos.filter(todo => todo.id !== id))
+    dispatch({type: 'remove', value: {id: id, todo: '', isDone: false, isEditing: false},values: []})
   }
 
 
   const handleEdit  = (event:React.FormEvent, id:number) => {
     event.preventDefault()
-    setTodos(todos.map((todo) => todo.id == id ? {...todo,todo:editTodo} : todo))
-    setEdit(false)
+    // setTodos(todos.map((todo) => todo.id == id ? {...todo,todo:editTodo} : todo))
+    // setEdit(false)
+
+    dispatch({type: 'edit', value: {id: id, todo: '', isDone: false, isEditing: false}, values: []})
   }
+
 
 
   return (
@@ -59,15 +64,15 @@ const SingleTodo:React.FC<Props> = ({todo, todos, setTodos, index}:Props) => {
             todo.isDone ? 
             <p className="singleTodo-card__text" style={{textDecoration: 'line-through'}}>{todo?.todo}</p>
               :
-              edit ?
+              todo.isEditing ?
               <input 
               type="text" 
               name="editedText" 
               id="edit"
-              value={editTodo}
+              value={state.todo.todo}
               className='singleTodo-card__input'
               onChange={(e) => {
-                setEditTodo(e.target.value)
+                dispatch({type: 'input', value: {id: 0, todo: e.target.value, isDone: false, isEditing: false}, values: []})
               }} 
               ref={inputRef}
             />
@@ -77,8 +82,8 @@ const SingleTodo:React.FC<Props> = ({todo, todos, setTodos, index}:Props) => {
           }
           <div className="singleTodo-card__buttons">
             <button type='button' className='singleTodo-card__button' onClick={() => {
-              if(!edit && !todo.isDone){
-                setEdit(!edit)
+              if(!state.isEdit && !todo.isDone){
+                 dispatch({type: 'editInput', value: {id: todo.id, todo: '', isDone: false, isEditing: !todo.isEditing}, values: []})
               }
             }}>
               <img src={EditIcon} alt="edit" />
